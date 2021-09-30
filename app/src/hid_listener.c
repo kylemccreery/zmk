@@ -37,7 +37,7 @@ static int hid_listener_keycode_pressed(const struct zmk_keycode_state_changed *
         break;
     // FIXME: we shouldn't and off the usage page here, we should use the whole
     // page number
-    case HID_USAGE_PLOVER & 0xFF:
+    case HID_USAGE_VENDOR_PLOVER & 0xFF:
         err = zmk_hid_plover_press(ev->keycode);
         if (err) {
             LOG_ERR("Unable to press keycode");
@@ -70,7 +70,7 @@ static int hid_listener_keycode_released(const struct zmk_keycode_state_changed 
         }
     // FIXME: we shouldn't and off the usage page here, we should use the whole
     // page number
-    case HID_USAGE_PLOVER & 0xFF:
+    case HID_USAGE_VENDOR_PLOVER & 0xFF:
         err = zmk_hid_plover_release(ev->keycode);
         if (err) {
             LOG_ERR("Unable to press keycode");

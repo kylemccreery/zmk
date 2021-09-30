@@ -169,7 +169,7 @@ int zmk_endpoints_send_report(uint16_t usage_page) {
     // FIXME: we should not and the usage page here, we should make sure
     // the whole page gets here
 #if IS_ENABLED(CONFIG_ZMK_PLOVER_HID)
-    case (HID_USAGE_PLOVER & 0xFF):
+    case (HID_USAGE_VENDOR_PLOVER & 0xFF):
         return send_plover_report();
 #endif /* IS_ENABLED(CONFIG_ZMK_PLOVER_HID) */
     default:
@@ -266,7 +266,7 @@ static void disconnect_current_endpoint() {
 
     zmk_endpoints_send_report(HID_USAGE_KEY);
     zmk_endpoints_send_report(HID_USAGE_CONSUMER);
-    zmk_endpoints_send_report(HID_USAGE_PLOVER);
+    zmk_endpoints_send_report(HID_USAGE_VENDOR_PLOVER);
 }
 
 static void update_current_endpoint() {
