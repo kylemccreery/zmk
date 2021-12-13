@@ -9,7 +9,8 @@
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/outputs.h>
 
-#define DEFAULT 0
+#define STENO 0
+#define DEFAULT 1
 #define LOWER   1
 #define RAISE   2
 #define CONTROL 3
@@ -17,6 +18,15 @@
 / {
 	keymap {
 		compatible = "zmk,keymap";
+		
+		steno_layer {
+			bindings = <
+                &kp ESC    &kp PLV_S1 &kp PLV_TL &kp PLV_PL &kp PLV_HL &kp PLV_ST1      &kp PLV_FR   &kp PLV_PR  &kp PLV_LR     &kp PLV_TR     &kp PLV_DR     &kp BSPC
+                &mo LOWER  &kp PLV_S2 &kp PLV_KL &kp PLV_WL &kp PLV_RL &kp PLV_ST2      &kp PLV_RR   &kp PLV_BR  &kp PLV_GR     &kp PLV_SR     &kp PLV_ZR
+                &kp LSHFT  &kp Z     &kp X     &kp C  &kp V     &kp B      &kp N   &kp M  &kp FSLH            &kp UP    &kp RSHFT
+                &kp LCTRL  &kp LGUI  &kp PLV_A  &kp PLV_O  &kp PLV_E  &kp PLV_U  &kp LEFT &kp DOWN  &kp RIGHT
+			>;
+		};
 		
 		default_layer {
 			bindings = <
@@ -26,7 +36,7 @@
                 &kp LCTRL  &kp LGUI  &kp LALT  &lt LOWER SPACE  &lt CONTROL SPACE  &lt RAISE SPACE  &kp LEFT  &kp DOWN  &kp RIGHT
 			>;
 		};
-
+		
 		lower_layer {
 			bindings = <
                 &kp GRAVE  &kp N1     &kp N2     &kp N3  &kp N4  &kp N5  &kp N6  &kp N7     &kp N8    &kp N9     &kp N0     &kp DEL
