@@ -1,0 +1,12 @@
+file_format: "1"
+id: rbf
+name: RBF
+type: shield
+url: https://mechwild.com/product/murphpad/
+requires: [blackpill]
+exposes: [i2c_oled]
+features:
+  - keys
+  - display
+  - encoder
+  - underglow
