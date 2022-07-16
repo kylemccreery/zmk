@@ -12,7 +12,7 @@ if SHIELD_MOKULUA_LEFT || SHIELD_MOKULUA_RIGHT
 
 config ZMK_SPLIT
 	default y
- 
+
 if ZMK_DISPLAY
 
 config I2C
