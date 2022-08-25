@@ -82,6 +82,7 @@ config ZMK_USB
 	select USB
 	select USB_DEVICE_STACK
 	select USB_DEVICE_HID
+	select ENABLE_HID_INT_OUT_EP
 
 if ZMK_USB
 
@@ -280,6 +281,20 @@ config ZMK_BACKLIGHT_AUTO_OFF_USB
 	bool "Turn off backlight when USB is disconnected"
 
 #ZMK_BACKLIGHT
+endif
+
+menuconfig ZMK_LED_INDICATORS
+	bool "LED indicators"
+	select LED
+
+if ZMK_LED_INDICATORS
+
+config ZMK_LED_INDICATORS_BRT
+	int "Brightness in percent"
+	range 1 100
+	default 80
+
+#ZMK_LED_INDICATORS
 endif
 
 #Display/LED Options
