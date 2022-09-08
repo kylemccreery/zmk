@@ -49,6 +49,21 @@
     scl-pin = <13>;
 };
 
+&spi1 {
+    compatible = "nordic,nrf-spim";
+    sck-pin = <40>;
+    mosi-pin = <11>;
+    miso-pin = <26>;
+};
+
+&spi2 {
+    compatible = "nordic,nrf-spim";
+
+	// Unused pins, needed for SPI definition, but not used by the ws2812 driver itself.
+	sck-pin = <27>;
+	miso-pin = <28>;
+};
+
 &uart0 {
     compatible = "nordic,nrf-uarte";
     tx-pin = <6>;

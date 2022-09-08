@@ -27,25 +27,3 @@
         full-ohms = <(2000000 + 820000)>;
     };
 };
-
-
-&spi1 {
-    compatible = "nordic,nrf-spim";
-    status = "okay";
-    sck-pin = <40>;
-    mosi-pin = <11>;
-    miso-pin = <26>;
-
-    cs-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
-    trackpad@0 {
-        compatible = "cirque,pinnacle";
-        status = "okay";
-        reg = <0>;
-        spi-max-frequency = <10000000>;
-        dr-gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>;
-        invert-x;
-        sleep;
-        /* no-taps; */
-        label = "Cirque Trackpad";
-    };
-};
