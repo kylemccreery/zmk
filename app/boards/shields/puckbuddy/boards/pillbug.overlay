@@ -7,32 +7,53 @@
  #include <dt-bindings/led/led.h>
 
 &spi1 {
-	compatible = "nordic,nrf-spim";
-	status = "okay";
-	mosi-pin = <2>;
-	// Unused pins, needed for SPI definition, but not used by the ws2812 driver itself.
-	sck-pin = <27>;
-	miso-pin = <28>;
+    compatible = "nordic,nrf-spim";
+    status = "okay";
+    sck-pin = <40>;
+    mosi-pin = <11>;
+    miso-pin = <26>;
 
-	led_strip: ws2812@0 {
-		compatible = "worldsemi,ws2812-spi";
-		label = "WS2812";
-
-		/* SPI */
-		reg = <0>; /* ignored, but necessary for SPI bindings */
-		spi-max-frequency = <4000000>;
-
-		/* WS2812 */
-		chain-length = <3>; /* number of LEDs */
-		spi-one-frame = <0x70>;
-		spi-zero-frame = <0x40>;
-
-		color-mapping = <LED_COLOR_ID_GREEN LED_COLOR_ID_RED LED_COLOR_ID_BLUE>;
-	};
+    cs-gpios = <&blackpill 14 GPIO_ACTIVE_LOW>;
+    trackpad@2 {
+        compatible = "cirque,pinnacle";
+        status = "okay";
+        reg = <2>;
+        spi-max-frequency = <10000000>;
+        dr-gpios = <&blackpill 12 GPIO_ACTIVE_HIGH>;
+        invert-x;
+        sleep;
+        /* no-taps; */
+        label = "Cirque Trackpad";
+    };
 };
 
-/ {
-	chosen {
-		zmk,underglow = &led_strip;
-	};
-};
+//&spi1 {
+//	compatible = "nordic,nrf-spim";
+//	status = "okay";
+//	mosi-pin = <2>;
+//	// Unused pins, needed for SPI definition, but not used by the ws2812 driver itself.
+//	sck-pin = <27>;
+//	miso-pin = <28>;
+//
+//	led_strip: ws2812@0 {
+//		compatible = "worldsemi,ws2812-spi";
+//		label = "WS2812";
+//
+//		/* SPI */
+//		reg = <0>; /* ignored, but necessary for SPI bindings */
+//		spi-max-frequency = <4000000>;
+//
+//		/* WS2812 */
+//		chain-length = <3>; /* number of LEDs */
+//		spi-one-frame = <0x70>;
+//		spi-zero-frame = <0x40>;
+//
+//		color-mapping = <LED_COLOR_ID_GREEN LED_COLOR_ID_RED LED_COLOR_ID_BLUE>;
+//	};
+//};
+
+/// {
+//	chosen {
+//		zmk,underglow = &led_strip;
+//	};
+//};

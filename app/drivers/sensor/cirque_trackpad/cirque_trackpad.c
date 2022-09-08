@@ -3,7 +3,7 @@
 #include <drivers/spi.h>
 #include <init.h>
 #include <drivers/sensor.h>
-#include <zmk/sensors.h>
+#include <../../../include/zmk/sensors.h>
 #include <logging/log.h>
 
 #include "cirque_trackpad.h"
