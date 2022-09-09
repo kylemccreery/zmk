@@ -8,17 +8,22 @@
 #include "dogbone.dtsi"
 
 / {
+	chosen {
+		zmk,battery = &vbatt;
+	};
+};
+
+/ {
 	ext-power {
 		compatible = "zmk,ext-power-generic";
 		label = "EXT_POWER";
 		control-gpios = <&gpio1 9 GPIO_ACTIVE_LOW>;
+        init-delay-ms = <50>;
 	};
 
-	vbatt {
-		compatible = "zmk,battery-voltage-divider";
+	vbatt: vbatt {
+		compatible = "zmk,battery-nrf-vddh";
 		label = "BATTERY";
-		io-channels = <&adc 2>;
-		output-ohms = <2000000>;
-		full-ohms = <(2000000 + 820000)>;
 	};
+
 };
