@@ -26,7 +26,7 @@ From here on, building and flashing ZMK should all be done from the `app/` subdi
 cd app
 ```
 
-To build for your particular keyboard, the behaviour varies slightly depending on if you are building for a keyboard with
+To build for your particular keyboard, the behavior varies slightly depending on if you are building for a keyboard with
 an onboard MCU, or one that uses an MCU board addon.
 
 ### Keyboard (Shield) + MCU Board
@@ -88,6 +88,10 @@ west build -d build/right -b nice_nano -- -DSHIELD=kyria_right
 
 This produces `left` and `right` subfolders under the `build` directory and two separate .uf2 files. For future work on a specific half, use the `-d` parameter again to ensure you are building into the correct location.
 
+:::tip
+Build times can be significantly reduced after the initial build by omitting all build arguments except the build directory, e.g. `west build -d build/left`. The additional options and intermediate build outputs from your initial build are cached and reused for unchanged files.
+:::
+
 ### Building from `zmk-config` Folder
 
 Instead of building .uf2 files using the default keymap and config files, you can build directly from your [`zmk-config` folder](../user-setup.md#github-repo) by adding
@@ -98,6 +102,10 @@ For instance, building kyria firmware from a user `myUser`'s `zmk-config` folder
 ```
 west build -b nice_nano -- -DSHIELD=kyria_left -DZMK_CONFIG="C:/Users/myUser/Documents/Github/zmk-config/config"
 ```
+
+:::caution
+The above command must still be invoked from the `zmk/app` directory as noted above, rather than the config directory. Otherwise, you will encounter errors such as `ERROR: source directory "." does not contain a CMakeLists.txt; is this really what you want to build?`. Alternatively you can add the `-s /path/to/zmk/app` flag to your `west` command.
+:::
 
 In order to make your `zmk-config` folder available when building within the VSCode Remote Container, you need to create a docker volume named `zmk-config`
 by binding it to the full path of your config directory. If you have run the VSCode Remote Container before, it is likely that docker has created this

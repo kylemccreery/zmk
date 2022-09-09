@@ -82,7 +82,7 @@ bash -c "$(wget https://zmk.dev/setup.sh -O -)" '' --wget
 <TabItem value="PowerShell">
 
 ```
-iex ((New-Object System.Net.WebClient).DownloadString('https://zmk.dev/setup.ps1'))
+powershell -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://zmk.dev/setup.ps1'))"
 ```
 
 </TabItem>
@@ -143,6 +143,10 @@ GitHub Repo: https://github.com/petejohanson/zmk-config.git
 
 Only the GitHub username is required; if you are happy with the defaults offered in the square brackets, you can simply hit `Enter`.
 
+:::note
+If you are using SSH keys for git push, change GitHub Repo field to the SSH scheme, e.g. `git@github.com:petejohanson/zmk-config.git`.
+:::
+
 ### Confirming Selections
 
 The setup script will confirm all of your selections one last time, before performing the setup:
@@ -195,7 +199,7 @@ storage device. Once the flash is complete, the controller should automatically 
 
 ZMK will automatically advertise itself as connectable if it is not currently connected to a device. You should be able to see your keyboard from the bluetooth scanning view of your laptop or phone / tablet. It is reported by some users that the connections with Android / iOS devices are generally smoother than with laptops, so if you have trouble connecting, you could try to connect from your phone or tablet first to eliminate any potential hardware issues.
 
-ZMK support multiple BLE “profiles”, which allows you to connect to and switch among multiple devices. Please refer to the [Bluetooth behavior](behaviors/bluetooth.md) section for detailed explanations of how to use them.
+ZMK supports multiple BLE “profiles”, which allows you to connect to and switch among multiple devices. Please refer to the [Bluetooth behavior](behaviors/bluetooth.md) section for detailed explanations on how to use them.
 
 ### Connecting Split Keyboard Halves
 

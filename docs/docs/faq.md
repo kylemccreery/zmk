@@ -7,12 +7,12 @@ sidebar_label: FAQs
 
 As a best-in-class RTOS, Zephyr™ brings many [benefits](https://www.zephyrproject.org/benefits) to ZMK, such as:
 
-- A _single_ platform [supporting](https://docs.zephyrproject.org/latest/boards) many architectures, processors and boards.
+- A _single_ platform [supporting](https://docs.zephyrproject.org/latest/boards/index.html) many architectures, processors and boards.
 - Optimization for low-powered, small memory footprint devices.
-- Powerful hardware abstraction and configuration using [DeviceTree](https://docs.zephyrproject.org/latest/guides/dts/index.html) and [Kconfig](https://docs.zephyrproject.org/latest/guides/kconfig/index.html).
-- A BLE stack that periodically obtains [qualification](https://docs.zephyrproject.org/latest/guides/bluetooth/bluetooth-qual.html) listings, making it easier for final products to obtain qualification from the Bluetooth® SIG.
+- Powerful hardware abstraction and configuration using [DeviceTree](https://docs.zephyrproject.org/latest/guides/dts/index.html) and [Kconfig](https://docs.zephyrproject.org/latest/build/kconfig/index.html).
+- A BLE stack that periodically obtains [qualification](https://docs.zephyrproject.org/latest/connectivity/bluetooth/bluetooth-qual.html) listings, making it easier for final products to obtain qualification from the Bluetooth® SIG.
 - Multi-processor support, which is critical for power efficiency in upcoming MCUs.
-- Permissive licencing with its Apache 2.0 open source [license](https://www.apache.org/licenses/LICENSE-2.0).
+- Permissive licensing with its Apache 2.0 open source [license](https://www.apache.org/licenses/LICENSE-2.0).
 - A buzzing developer [community](https://github.com/zephyrproject-rtos/zephyr) including many leading [embedded technology](https://www.zephyrproject.org/project-members) companies.
 - Long term support (LTS) with security updates.
 
@@ -23,7 +23,7 @@ That’s an excellent question! There are already great keyboard firmwares avail
 - Zephyr™
   - See [Why Zephyr™?](#why-zephyr)
 - Licensing
-  - Just like other open source firmware, ZMK is all about the free and the sharing. However, some other projects use the GPL licence which prevents integration of libraries and drivers whose licenses are not GPL-compatible (such as some embedded BLE drivers). ZMK uses the permissive [MIT](https://github.com/zmkfirmware/zmk/blob/main/LICENSE) license which doesn’t have this limitation.
+  - Just like other open source firmware, ZMK is all about the free and the sharing. However, some other projects use the GPL license which prevents integration of libraries and drivers whose licenses are not GPL-compatible (such as some embedded BLE drivers). ZMK uses the permissive [MIT](https://github.com/zmkfirmware/zmk/blob/main/LICENSE) license which doesn’t have this limitation.
 - Wireless First
   - ZMK is designed for the future, and we believe the future is wireless. So power efficiency plays a critical role in every design decision, just like in Zephyr™.
 
@@ -79,6 +79,14 @@ Please note, many keyboards only have a single PCB which includes the “brains�
 ### Does ZMK support wired split?
 
 Currently, ZMK only supports wireless split, but wired split is possible and we welcome contributions!
+
+### How is the latency?
+
+The latency of ZMK is comparable to other firmware offerings. ZMK is equipped with a variety of scanning methods and [debounce algorithms](features/debouncing.md) that can affect the final measured latency. [This video](https://www.youtube.com/watch?v=jWL4nU-vtWs) shows a latency comparison of ZMK and other keyboard firmwares.
+
+### Any chance for 2.4GHz dongle implementation?
+
+At this time, there are no current plans to implement 2.4GHz dongle mode. This is because utilizing Nordic's proprietary 2.4GHz low level protocols requires use of the Nordic Connect SDK, which is licensed with a more restrictive license than ZMK's MIT license. However, ZMK does plan to implement dongle mode using BLE (with encryption). This will result in a 3.75ms average latency from the protocol itself.
 
 ### What bootloader does ZMK use?
 
