@@ -72,7 +72,7 @@
         fn_layer {
 		label = "fn layer";
             bindings = <
-                &trans      &trans              &trans                 &trans          &trans
+                &trans      &bootloader         &reset                 &trans          &bt BT_NXT
                 &trans      &kp KP_NUM          &trans                 &trans          &trans     
                 &trans      &rgb_ug RGB_SAD     &rgb_ug RGB_SAI        &trans	       &trans
                 &bt BT_CLR  &rgb_ug RGB_HUD     &rgb_ug RGB_HUI        &trans          &trans    

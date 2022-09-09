@@ -4,10 +4,12 @@
  * SPDX-License-Identifier: MIT
  */
 
+ #include <dt-bindings/led/led.h>
+
 &spi1 {
 	compatible = "nordic,nrf-spim";
 	status = "okay";
-	mosi-pin = <43>;
+	mosi-pin = <31>;
 	// Unused pins, needed for SPI definition, but not used by the ws2812 driver itself.
 	sck-pin = <5>;
 	miso-pin = <7>;
@@ -24,6 +26,8 @@
 		chain-length = <8>; /* number of LEDs */
 		spi-one-frame = <0x70>;
 		spi-zero-frame = <0x40>;
+
+		color-mapping = <LED_COLOR_ID_GREEN LED_COLOR_ID_RED LED_COLOR_ID_BLUE>;
 	};
 };
 
