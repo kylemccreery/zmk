@@ -16,6 +16,12 @@
 #include <behaviors/ext_power.dtsi>
 #include <behaviors/outputs.dtsi>
 #include <behaviors/caps_word.dtsi>
+<<<<<<< HEAD
 #include <behaviors/key_repeat.dtsi>
 #include <behaviors/backlight.dtsi>
 #include <behaviors/macros.dtsi>
+=======
+#include <behaviors/mouse_key_press.dtsi>
+#include <behaviors/mouse_move.dtsi>
+#include <behaviors/mouse_scroll.dtsi>
+>>>>>>> ee855f4d6736da4d696e74f7875d209c7c173a11
