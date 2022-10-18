@@ -1,0 +1,12 @@
+file_format: "1"
+id: sugarbug
+name: SugarBug
+type: board
+arch: arm
+features:
+  - keys
+outputs:
+  - usb
+  - ble
+url: https://mechwild.com
+exposes: [blackpill]

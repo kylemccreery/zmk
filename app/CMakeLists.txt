@@ -24,13 +24,10 @@ target_sources(app PRIVATE src/stdlib.c)
 target_sources(app PRIVATE src/activity.c)
 target_sources(app PRIVATE src/kscan.c)
 target_sources(app PRIVATE src/matrix_transform.c)
-<<<<<<< HEAD
-=======
 target_sources(app PRIVATE src/hid.c)
 target_sources(app PRIVATE src/mouse/key_listener.c)
 target_sources(app PRIVATE src/mouse/main.c)
 target_sources(app PRIVATE src/mouse/tick_listener.c)
->>>>>>> ee855f4d6736da4d696e74f7875d209c7c173a11
 target_sources(app PRIVATE src/sensors.c)
 target_sources_ifdef(CONFIG_ZMK_WPM app PRIVATE src/wpm.c)
 target_sources(app PRIVATE src/event_manager.c)
@@ -64,13 +61,11 @@ if ((NOT CONFIG_ZMK_SPLIT) OR CONFIG_ZMK_SPLIT_ROLE_CENTRAL)
   target_sources(app PRIVATE src/behaviors/behavior_transparent.c)
   target_sources(app PRIVATE src/behaviors/behavior_none.c)
   target_sources(app PRIVATE src/behaviors/behavior_sensor_rotate_key_press.c)
-<<<<<<< HEAD
-=======
+
   target_sources(app PRIVATE src/behaviors/behavior_mouse_key_press.c)
   target_sources(app PRIVATE src/behaviors/behavior_mouse_move.c)
   target_sources(app PRIVATE src/behaviors/behavior_mouse_scroll.c)
   target_sources_ifdef(CONFIG_ZMK_EXT_POWER app PRIVATE src/behaviors/behavior_ext_power.c)
->>>>>>> ee855f4d6736da4d696e74f7875d209c7c173a11
   target_sources(app PRIVATE src/combo.c)
   target_sources(app PRIVATE src/behavior_queue.c)
   target_sources(app PRIVATE src/conditional_layer.c)

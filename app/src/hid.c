@@ -228,7 +228,6 @@ int zmk_hid_consumer_release(zmk_key_t code) {
 
 void zmk_hid_consumer_clear() { memset(&consumer_report.body, 0, sizeof(consumer_report.body)); }
 
-<<<<<<< HEAD
 bool zmk_hid_consumer_is_pressed(zmk_key_t key) {
     for (int idx = 0; idx < CONFIG_ZMK_HID_CONSUMER_REPORT_SIZE; idx++) {
         if (consumer_report.body.keys[idx] == key) {
@@ -267,7 +266,7 @@ bool zmk_hid_is_pressed(uint32_t usage) {
     }
     return false;
 }
-=======
+
 // Keep track of how often a button was pressed.
 // Only release the button if the count is 0.
 static int explicit_button_counts[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -346,7 +345,6 @@ void zmk_hid_mouse_scroll_update(int8_t x, int8_t y) {
             mouse_report.body.scroll_y);
 }
 void zmk_hid_mouse_clear() { memset(&mouse_report.body, 0, sizeof(mouse_report.body)); }
->>>>>>> ee855f4d6736da4d696e74f7875d209c7c173a11
 
 struct zmk_hid_keyboard_report *zmk_hid_get_keyboard_report() {
     return &keyboard_report;

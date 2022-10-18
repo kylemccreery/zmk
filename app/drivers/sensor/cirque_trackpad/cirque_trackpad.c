@@ -3,7 +3,6 @@
 #include <drivers/spi.h>
 #include <init.h>
 #include <drivers/sensor.h>
-#include <zmk/sensors.h>
 #include <logging/log.h>
 
 #include "cirque_trackpad.h"
@@ -257,4 +256,4 @@ static const struct pinnacle_config pinnacle_config = {
 #endif
 };
 
-DEVICE_DT_INST_DEFINE(0, pinnacle_init, device_pm_control_nop, &pinnacle_data, &pinnacle_config, POST_KERNEL, CONFIG_SENSOR_INIT_PRIORITY, &pinnacle_driver_api);
+DEVICE_DT_INST_DEFINE(0, pinnacle_init, NULL, &pinnacle_data, &pinnacle_config, POST_KERNEL, CONFIG_SENSOR_INIT_PRIORITY, &pinnacle_driver_api);

@@ -49,6 +49,20 @@
 #define PINNACLE_PACKET0_X_SIGN     BIT(4)  // X delta sign
 #define PINNACLE_PACKET0_Y_SIGN     BIT(5)  // Y delta sign
 
+#pragma once
+
+#define ZMK_KEYMAP_SENSORS_NODE DT_INST(0, zmk_keymap_sensors)
+#define ZMK_KEYMAP_HAS_SENSORS DT_NODE_HAS_STATUS(ZMK_KEYMAP_SENSORS_NODE, okay)
+#define ZMK_KEYMAP_SENSORS_LEN DT_PROP_LEN(ZMK_KEYMAP_SENSORS_NODE, sensors)
+#define ZMK_KEYMAP_SENSORS_BY_IDX(idx) DT_PHANDLE_BY_IDX(ZMK_KEYMAP_SENSORS_NODE, sensors, idx)
+
+#include <drivers/sensor.h>
+
+enum {
+    // Cirque Pinnacle Glide Extend
+    SENSOR_ATTR_PINNACLE_GE = SENSOR_ATTR_PRIV_START,
+};
+
 struct pinnacle_data {
     const struct device *spi;
     int16_t dx, dy;
