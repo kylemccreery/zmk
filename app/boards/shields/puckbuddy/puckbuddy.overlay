@@ -34,7 +34,7 @@
 
     default_transform: keymap_transform_0 {
         compatible = "zmk,matrix-transform";
-        columns = <12>;
+        columns = <4>;
         rows = <4>;
         map = <
             RC(0,0) RC(0,1) RC(1,1) RC(2,1)         RC(0,2)
@@ -49,7 +49,7 @@
         compatible = "alps,ec11";
         label = "Encoder 1";
         a-gpios = <&blackpill 18 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-        b-gpios = <&blackpill 19bb (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+        b-gpios = <&blackpill 19 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
         resolution = <4>;
         status = "disabled";
     };

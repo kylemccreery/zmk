@@ -52,7 +52,7 @@
     kscan0: kscan {
         compatible = "zmk,kscan-gpio-matrix";
         label = "KSCAN";
-
+    
         diode-direction = "row2col";
         debounce-scan-period-ms = <10>;
         row-gpios
@@ -105,7 +105,7 @@
         resolution = <4>;
         status = "disabled";
     };
-
+    
     encoder_3: encoder_3 {
 		compatible = "alps,ec11";
 		label = "Encoder 3";
@@ -114,8 +114,8 @@
 		resolution = <4>;
 		status = "disabled";
 	};
-
-
+    
+    
 	encoder_4: encoder_4 {
 		compatible = "alps,ec11";
 		label = "Encoder 4";
@@ -199,7 +199,7 @@
     };
 };
 
-&spi1 {
+&spi2 {
 	compatible = "nordic,nrf-spim";
 	status = "okay";
 	mosi-pin = <36>;
@@ -225,7 +225,7 @@
 	};
 };
 
-&spi2 {
+&spi1 {
     compatible = "nordic,nrf-spim";
     status = "okay";
     sck-pin = <40>;

@@ -43,10 +43,10 @@
         default_layer {
             label = "default layer";
             bindings = <
-                &kp ESC   &kp Q   &kp W     &kp E     &kp R     &kp T                        &trans &kp Y     &kp U     &kp I     &kp O    &kp P    &kp BSPC 
-                &mo 1     &kp A   &kp S     &kp D     &kp F     &kp G             &kp C_MUTE &trans &kp H     &kp J     &kp K     &kp L    &kp SEMI &kp ENTER
-                &kp LSHFT &kp Z   &kp X     &kp C     &kp V     &kp B                        &trans &kp N     &kp M     &kp COMMA &kp DOT  &kp FSLH &kp RSHFT
-                &kp C_MUTE        &kp LCTRL &kp LALT  &kp SPACE       &kp Y &kp Y &kp Y                       &kp SPACE &kp SPACE &kp RGUI          &kp C_MUTE
+                &kp ESC   &kp Q   &kp W     &kp E     &kp R     &kp T                        &bt BT_CLR &kp Y     &kp U     &kp I     &kp O    &kp P    &kp BSPC 
+                &mo 1     &kp A   &kp S     &kp D     &kp F     &kp G             &kp C_MUTE &bt BT_PRV &kp H     &kp J     &kp K     &kp L    &kp SEMI &kp ENTER
+                &kp LSHFT &kp Z   &kp X     &kp C     &kp V     &kp B                        &bt BT_NXT &kp N     &kp M     &kp COMMA &kp DOT  &kp FSLH &mo 1
+                &kp C_MUTE        &kp LCTRL &kp LALT  &kp SPACE       &rgb_ug RGB_EFR &rgb_ug RGB_TOG &rgb_ug RGB_EFF                      &kp SPACE &kp SPACE &kp RGUI          &kp C_MUTE
             >;
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &inc_dec_kp PG_UP PG_DN &inc_dec_kp C_VOL_UP C_VOL_DN &inc_dec_kp C_VOL_UP C_VOL_DN>;
 

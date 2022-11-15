@@ -22,8 +22,8 @@ CONFIG_FLASH_PAGE_LAYOUT=y
 CONFIG_FLASH_MAP=y
 
 # Uncomment to turn on logging, and set ZMK logging to debug output
-CONFIG_ZMK_USB_LOGGING=y
-CONFIG_I2C_LOG_LEVEL_DBG=y
+#CONFIG_ZMK_USB_LOGGING=y
+#CONFIG_I2C_LOG_LEVEL_DBG=y
 #CONFIG_GPIO_LOG_LEVEL_DBG=y
 
 # Uncomment both to enable encoder
