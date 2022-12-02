@@ -64,10 +64,7 @@
 
 };
 
-nice_view_spi: &spi0 {
+nice_view_spi: &blackpill_spi {
 	compatible = "nordic,nrf-spim";
-	sck-pin = <40>;
-	mosi-pin = <11>;
-	miso-pin = <26>;
 	cs-gpios = <&blackpill 45 GPIO_ACTIVE_HIGH>;
 };
