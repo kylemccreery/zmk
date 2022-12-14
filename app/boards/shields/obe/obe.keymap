@@ -9,9 +9,14 @@
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/rgb.h>
 #include <dt-bindings/zmk/ext_power.h>
-
+#include <dt-bindings/zmk/outputs.h>
+#include <dt-bindings/zmk/modifiers.h>
 
 #define TIMEOUT 300
+#define DEFAULT 0
+#define FUNC    1
+#define LOWER   2
+#define RAISE   3
 
 &encoder_1 {
     status = "okay";
@@ -59,11 +64,11 @@
         default_layer {
             label = "default layer";
             bindings = <
-                &kp C_MUTE &kp ESC &kp N1    &kp N2    &kp N3    &kp N4    &kp N5    &kp N6    &kp N7    &kp N8    &kp N9    &kp N0    &kp MINUS &kp EQUAL  &trans &kp BSPC
-                &kp PG_UP &kp TAB  &kp Q    &kp W    &kp E    &kp R    &kp T    &kp Y    &kp U    &kp I    &kp O    &kp P    &kp LBKT &kp RBKT &kp BSLH
-                &kp PG_DN &mo 1   &kp A    &kp S    &kp D    &kp F    &kp G    &kp H    &kp J    &kp K    &kp L    &kp SEMI &kp APOS          &kp ENTER
-                         &kp LSHFT &kp Z    &kp X    &kp C    &kp V    &kp B    &kp B    &kp N    &kp M    &kp COMMA &kp DOT  &kp FSLH &kp UP   &kp RSHFT
-                         &kp LCTRL &kp LGUI &kp LALT          &kp SPACE  &mo 1           &kp SPACE           &kp RALT &mo 1   &kp LEFT &kp DOWN &kp RIGHT
+                &kp C_MUTE &kp ESC  &kp N1   &kp N2   &kp N3   &kp N4   &kp N5   &kp N6      &kp N7    &kp N8    &kp N9    &kp N0    &kp MINUS &kp EQUAL  &kp BSLH &kp DEL
+                &kp PG_UP &kp TAB   &kp Q    &kp W    &kp E    &kp R    &kp T    &kp Y        &kp U    &kp I    &kp O    &kp P    &kp LBKT &kp RBKT &kp BSPC
+                &kp PG_DN &mo RAISE &kp A    &kp S    &kp D    &kp F    &kp G    &kp H        &kp J    &kp K    &kp L    &kp SEMI &kp APOS          &kp ENTER
+                         &kp LSHFT  &kp Z    &kp X    &kp C    &kp V    &kp B    &lt LOWER B  &kp N    &kp M    &kp COMMA &kp DOT  &kp FSLH &mt RSHFT UP   &kp RSHFT
+                         &kp LCTRL  &kp LGUI &kp LALT         &kp SPACE  &mo FUNC        &lt RAISE SPACE           &kp RALT &kp RCTRL   &kp LEFT &kp DOWN &kp RIGHT
             >;
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
 
@@ -72,27 +77,39 @@
         fn_layer {
             label = "fn layer";
             bindings = <
-                &tog 2 &trans &kp F1   &kp F2   &kp F3   &kp F4   &kp F5   &kp F6   &kp F7   &kp F8   &kp F9   &kp F10  &kp F11  &kp F12  &trans &kp DEL
-                &bootloader &trans &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &trans &trans &trans &trans &trans &trans &trans &trans &trans
-                &bt BT_NXT &kp CAPS &kp KP_NUM &kp SLCK &trans &trans &trans &trans &trans &trans &trans &trans &trans          &trans
-                         &trans &trans &bt BT_CLR &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans
-                         &trans &trans  &rgb_ug RGB_BRD &rgb_ug RGB_EFR          &ext_power EP_TOG          &rgb_ug RGB_EFF &rgb_ug RGB_BRI &trans &kp HOME &trans &kp END
+                &tog FUNC   &trans &kp F1   &kp F2   &kp F3   &kp F4   &kp F5   &kp F6   &kp F7   &kp F8   &kp F9   &kp F10  &kp F11  &kp F12  &trans &kp INS
+                &bootloader &trans &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &trans &trans &kp PSCRN  &kp SLCK &kp PAUSE_BREAK  &trans &trans &trans &reset
+                &bt BT_NXT  &kp CAPS &none &none &none &none &none &none &none &none &none &none &none          &trans
+                &trans  &none  &bt BT_CLR &none &none &out OUT_BLE &out OUT_USB  &kp KP_NUM &none &none &none &none &kp PG_UP &trans
+                        &trans &trans  &trans &trans          &trans          &trans &trans &trans &kp HOME &kp PG_DN &kp END
             >;  
             sensor-bindings = <&inc_dec_kp PG_UP PG_DN>;
                 
         };
         
-        lock_layer {
-            label = "fn layer";
+        lower_layer {
+            label = "lower layer";
             bindings = <
-                &none &none &none   &none   &none   &none   &none   &none   &none   &none   &none   &none  &none  &none  &none &none
-                &none &none &none &none &none &none &none &none &none &none &none &none &none &none &none
-                &none &none &none &none &none &none &none &none &none &none &none &none &none          &none
-                         &none &none &none &none &none &none &none &none &none &none &none &none &none &none
-                         &none &none  &none &none          &none          &none &none &none &none &none &none
+                &tog LOWER &kp GRAVE &none   &none   &none   &none   &none   &none   &none   &none   &none   &none  &none  &none  &none &none
+                &kp PG_UP &trans &none &none &none &none &none &none &none &none &none &none &none &none &none
+                &kp PG_DN &trans &none &none &none &none &none &none &none &none &none &none &none          &trans
+                         &none &none &none &none &none &none &none &none &none &none &none &none &trans &trans
+                        &trans &trans  &rgb_ug RGB_BRD &rgb_ug RGB_EFR  &ext_power EP_TOG       &rgb_ug RGB_EFF &rgb_ug RGB_BRI &trans &trans &trans &trans
             >;  
             sensor-bindings = <&inc_dec_kp PG_UP PG_DN>;
-                
+	   };
+
+        raise_layer {
+            label = "raise layer";
+            bindings = <
+                &tog RAISE &kp TILDE &none  &none   &none   &none   &none   &none   &kp KP_N7 &kp KP_N8 &kp KP_N9 &kp KP_N0 &kp KP_MINUS  &kp KP_PLUS  &kp FSLH &kp DEL
+                &kp PG_UP &trans &kp HOME &kp UP &kp END &kp PG_UP &none &kp TAB &kp KP_N4 &kp KP_N5 &kp KP_N6 &none &none &none &kp KP_EQUAL
+                &kp PG_DN &trans &kp LEFT &kp DOWN &kp RIGHT &kp PG_DN &none &none &kp KP_N1 &kp KP_N2 &kp KP_N3 &none &kp KP_MULTIPLY  &kp KP_ENTER
+                         &none &none &none &none &none &none &none &kp KP_N0 &kp KP_N0 &kp COMMA &kp DOT &kp KP_DIVIDE &kp RC(PG_UP) &trans
+                         &none &none  &none &kp BSPC          &kp SPACE      &kp SPACE &kp RALT &trans &kp RC(HOME) &kp RC(PG_DN) &kp RC(END)
+            >;  
+            sensor-bindings = <&inc_dec_kp PG_UP PG_DN>;
+
         };
     };
 };
