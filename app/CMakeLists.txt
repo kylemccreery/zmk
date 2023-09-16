@@ -8,7 +8,7 @@ list(APPEND DTS_ROOT ${CMAKE_SOURCE_DIR}/drivers/zephyr)
 set(ZephyrBuildConfiguration_ROOT ${CMAKE_SOURCE_DIR}/cmake)
 
 list(APPEND ZEPHYR_EXTRA_MODULES
-  ${CMAKE_CURRENT_SOURCE_DIR}/drivers
+  ${CMAKE_CURRENT_SOURCE_DIR}/module
 )
 
 # Find Zephyr. This also loads Zephyr's build system.
@@ -43,7 +43,7 @@ if ((NOT CONFIG_ZMK_SPLIT) OR CONFIG_ZMK_SPLIT_ROLE_CENTRAL)
   target_sources(app PRIVATE src/behaviors/behavior_sticky_key.c)
   target_sources(app PRIVATE src/behaviors/behavior_caps_word.c)
   target_sources(app PRIVATE src/behaviors/behavior_key_repeat.c)
-  target_sources(app PRIVATE src/behaviors/behavior_macro.c)
+  target_sources_ifdef(CONFIG_ZMK_BEHAVIOR_MACRO app PRIVATE src/behaviors/behavior_macro.c)
   target_sources(app PRIVATE src/behaviors/behavior_momentary_layer.c)
   target_sources(app PRIVATE src/behaviors/behavior_mod_morph.c)
   target_sources(app PRIVATE src/behaviors/behavior_outputs.c)
@@ -51,7 +51,9 @@ if ((NOT CONFIG_ZMK_SPLIT) OR CONFIG_ZMK_SPLIT_ROLE_CENTRAL)
   target_sources(app PRIVATE src/behaviors/behavior_to_layer.c)
   target_sources(app PRIVATE src/behaviors/behavior_transparent.c)
   target_sources(app PRIVATE src/behaviors/behavior_none.c)
-  target_sources(app PRIVATE src/behaviors/behavior_sensor_rotate_key_press.c)
+  target_sources_ifdef(CONFIG_ZMK_BEHAVIOR_SENSOR_ROTATE app PRIVATE src/behaviors/behavior_sensor_rotate.c)
+  target_sources_ifdef(CONFIG_ZMK_BEHAVIOR_SENSOR_ROTATE_VAR app PRIVATE src/behaviors/behavior_sensor_rotate_var.c)
+  target_sources_ifdef(CONFIG_ZMK_BEHAVIOR_SENSOR_ROTATE_COMMON app PRIVATE src/behaviors/behavior_sensor_rotate_common.c)
   target_sources(app PRIVATE src/combo.c)
   target_sources(app PRIVATE src/behaviors/behavior_tap_dance.c)
   target_sources(app PRIVATE src/behavior_queue.c)
@@ -75,8 +77,8 @@ endif()
 target_sources_ifdef(CONFIG_ZMK_RGB_UNDERGLOW app PRIVATE src/behaviors/behavior_rgb_underglow.c)
 target_sources_ifdef(CONFIG_ZMK_BACKLIGHT app PRIVATE src/behaviors/behavior_backlight.c)
 
-target_sources_ifdef(CONFIG_ZMK_BLE app PRIVATE src/events/battery_state_changed.c)
-target_sources_ifdef(CONFIG_ZMK_BLE app PRIVATE src/battery.c)
+target_sources_ifdef(CONFIG_ZMK_BATTERY_REPORTING app PRIVATE src/events/battery_state_changed.c)
+target_sources_ifdef(CONFIG_ZMK_BATTERY_REPORTING app PRIVATE src/battery.c)
 
 target_sources_ifdef(CONFIG_ZMK_SPLIT app PRIVATE src/events/split_peripheral_status_changed.c)
 add_subdirectory(src/split)
@@ -85,6 +87,7 @@ target_sources_ifdef(CONFIG_USB_DEVICE_STACK app PRIVATE src/usb.c)
 target_sources_ifdef(CONFIG_ZMK_USB app PRIVATE src/usb_hid.c)
 target_sources_ifdef(CONFIG_ZMK_RGB_UNDERGLOW app PRIVATE src/rgb_underglow.c)
 target_sources_ifdef(CONFIG_ZMK_BACKLIGHT app PRIVATE src/backlight.c)
+target_sources(app PRIVATE src/workqueue.c)
 target_sources(app PRIVATE src/main.c)
 
 add_subdirectory(src/display/)

@@ -4,29 +4,29 @@
  * SPDX-License-Identifier: MIT
  */
 
-#include <device.h>
-#include <init.h>
+#include <zephyr/device.h>
+#include <zephyr/init.h>
 
 #include <errno.h>
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <settings/settings.h>
-#include <bluetooth/bluetooth.h>
-#include <bluetooth/conn.h>
-#include <bluetooth/hci.h>
-#include <bluetooth/uuid.h>
-#include <bluetooth/gatt.h>
-#include <bluetooth/hci_err.h>
+#include <zephyr/settings/settings.h>
+#include <zephyr/bluetooth/bluetooth.h>
+#include <zephyr/bluetooth/conn.h>
+#include <zephyr/bluetooth/hci.h>
+#include <zephyr/bluetooth/uuid.h>
+#include <zephyr/bluetooth/gatt.h>
+#include <zephyr/bluetooth/hci_err.h>
 
 #if IS_ENABLED(CONFIG_SETTINGS)
 
-#include <settings/settings.h>
+#include <zephyr/settings/settings.h>
 
 #endif
 
-#include <logging/log.h>
+#include <zephyr/logging/log.h>
 
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
@@ -43,15 +43,49 @@ static const struct bt_data zmk_ble_ad[] = {
 
 static bool is_connected = false;
 
-static int start_advertising() {
-    return bt_le_adv_start(BT_LE_ADV_CONN, zmk_ble_ad, ARRAY_SIZE(zmk_ble_ad), NULL, 0);
+static void each_bond(const struct bt_bond_info *info, void *user_data) {
+    bt_addr_le_t *addr = (bt_addr_le_t *)user_data;
+
+    if (bt_addr_le_cmp(&info->addr, BT_ADDR_LE_NONE) != 0) {
+        bt_addr_le_copy(addr, &info->addr);
+    }
+}
+
+static int start_advertising(bool low_duty) {
+    bt_addr_le_t central_addr = bt_addr_le_none;
+
+    bt_foreach_bond(BT_ID_DEFAULT, each_bond, &central_addr);
+
+    if (bt_addr_le_cmp(&central_addr, BT_ADDR_LE_NONE) != 0) {
+        struct bt_le_adv_param adv_param = low_duty ? *BT_LE_ADV_CONN_DIR_LOW_DUTY(&central_addr)
+                                                    : *BT_LE_ADV_CONN_DIR(&central_addr);
+        return bt_le_adv_start(&adv_param, NULL, 0, NULL, 0);
+    } else {
+        return bt_le_adv_start(BT_LE_ADV_CONN, zmk_ble_ad, ARRAY_SIZE(zmk_ble_ad), NULL, 0);
+    }
 };
+
+static bool low_duty_advertising = false;
+
+static void advertising_cb(struct k_work *work) {
+    const int err = start_advertising(low_duty_advertising);
+    if (err < 0) {
+        LOG_ERR("Failed to start advertising (%d)", err);
+    }
+}
+
+K_WORK_DEFINE(advertising_work, advertising_cb);
 
 static void connected(struct bt_conn *conn, uint8_t err) {
     is_connected = (err == 0);
 
     ZMK_EVENT_RAISE(new_zmk_split_peripheral_status_changed(
         (struct zmk_split_peripheral_status_changed){.connected = is_connected}));
+
+    if (err == BT_HCI_ERR_ADV_TIMEOUT) {
+        low_duty_advertising = true;
+        k_work_submit(&advertising_work);
+    }
 }
 
 static void disconnected(struct bt_conn *conn, uint8_t reason) {
@@ -59,12 +93,15 @@ static void disconnected(struct bt_conn *conn, uint8_t reason) {
 
     bt_addr_le_to_str(bt_conn_get_dst(conn), addr, sizeof(addr));
 
-    LOG_DBG("Disconnected from %s (reason 0x%02x)", log_strdup(addr), reason);
+    LOG_DBG("Disconnected from %s (reason 0x%02x)", addr, reason);
 
     is_connected = false;
 
     ZMK_EVENT_RAISE(new_zmk_split_peripheral_status_changed(
         (struct zmk_split_peripheral_status_changed){.connected = is_connected}));
+
+    low_duty_advertising = false;
+    k_work_submit(&advertising_work);
 }
 
 static void security_changed(struct bt_conn *conn, bt_security_t level, enum bt_security_err err) {
@@ -73,9 +110,9 @@ static void security_changed(struct bt_conn *conn, bt_security_t level, enum bt_
     bt_addr_le_to_str(bt_conn_get_dst(conn), addr, sizeof(addr));
 
     if (!err) {
-        LOG_DBG("Security changed: %s level %u", log_strdup(addr), level);
+        LOG_DBG("Security changed: %s level %u", addr, level);
     } else {
-        LOG_ERR("Security failed: %s level %u err %d", log_strdup(addr), level, err);
+        LOG_ERR("Security failed: %s level %u err %d", addr, level, err);
     }
 }
 
@@ -85,7 +122,7 @@ static void le_param_updated(struct bt_conn *conn, uint16_t interval, uint16_t l
 
     bt_addr_le_to_str(bt_conn_get_dst(conn), addr, sizeof(addr));
 
-    LOG_DBG("%s: interval %d latency %d timeout %d", log_strdup(addr), interval, latency, timeout);
+    LOG_DBG("%s: interval %d latency %d timeout %d", addr, interval, latency, timeout);
 }
 
 static struct bt_conn_cb conn_callbacks = {
@@ -116,11 +153,12 @@ static int zmk_peripheral_ble_init(const struct device *_arg) {
     LOG_WRN("Clearing all existing BLE bond information from the keyboard");
 
     bt_unpair(BT_ID_DEFAULT, NULL);
-#endif
-
+#else
     bt_conn_cb_register(&conn_callbacks);
 
-    start_advertising();
+    low_duty_advertising = false;
+    k_work_submit(&advertising_work);
+#endif
 
     return 0;
 }

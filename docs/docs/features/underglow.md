@@ -39,6 +39,20 @@ use Kconfig.
 
 If your board or shield does not have RGB underglow configured, refer to [Adding RGB Underglow to a Board](#adding-rgb-underglow-to-a-board).
 
+### Modifying the number of LEDs
+
+A common issue when enabling underglow is that some of the installed LEDs do not illuminate. This can happen when a board's default underglow configuration accounts only for either the downward facing LEDs or the upward facing LEDs under each key. On a split keyboard, a good sign that this may be the problem is that the unilluminated LEDs on each half are symmetrical.
+
+The number of underglow LEDs is controlled by the `chain-length` property in the `led_strip` node. You can [change the value of this property](../config/index.md#changing-devicetree-properties) in the `<keyboard>.keymap` file by adding a stanza like this one outside of any other node (i.e. above or below the `/` node):
+
+```
+&led_strip {
+    chain-length = <21>;
+};
+```
+
+where the value is the total count of LEDs (per half, for split keyboards).
+
 ## Configuring RGB Underglow
 
 See [RGB underglow configuration](/docs/config/underglow).
@@ -52,25 +66,35 @@ For example, the Kyria shield has a `boards/nice_nano.overlay` file that defines
 
 ### nRF52-based boards
 
-With nRF52 boards, you can just use `&spi1` and define the pins you want to use.
-
-To identify which pin number you need to put in the config you need do to a bit of math. You need the hardware port and run it through a function.
-**32 \* X + Y** = `<Pin number>` where X is first part of the hardware port "PX.01" and Y is the second part of the hardware port "P1.Y".
-
-(_P1.13_ would give you _32 \* 1 + 13_ = `<45>` and P0.15 would give you _32 \* 0 + 15_ = `<15>`)
+With nRF52 boards, you can just use `&spi3` and define the pins you want to use.
 
 Here's an example on a definition that uses P0.06:
 
 ```
 #include <dt-bindings/led/led.h>
 
-&spi1 {
+&pinctrl {
+    spi3_default: spi3_default {
+        group1 {
+            psels = <NRF_PSEL(SPIM_MOSI, 0, 6)>;
+        };
+    };
+
+    spi3_sleep: spi3_sleep {
+        group1 {
+            psels = <NRF_PSEL(SPIM_MOSI, 0, 6)>;
+            low-power-enable;
+        };
+    };
+};
+
+&spi3 {
   compatible = "nordic,nrf-spim";
   status = "okay";
-  mosi-pin = <6>;
-  // Unused pins, needed for SPI definition, but not used by the ws2812 driver itself.
-  sck-pin = <5>;
-  miso-pin = <7>;
+
+  pinctrl-0 = <&spi3_default>;
+  pinctrl-1 = <&spi3_sleep>;
+  pinctrl-names = "default", "sleep";
 
   led_strip: ws2812@0 {
     compatible = "worldsemi,ws2812-spi";
@@ -109,12 +133,12 @@ If your board/shield uses LEDs that require the data sent in a different order, 
 
 For other boards, you must select an SPI definition that has the `MOSI` pin as your data pin going to your LED strip.
 
-Here's another example for a non-nRF52 board on `spi1`:
+Here's another example for a non-nRF52 board on `spi3`:
 
 ```
 #include <dt-bindings/led/led.h>
 
-&spi1 {
+&spi3 {
 
   led_strip: ws2812@0 {
     compatible = "worldsemi,ws2812-spi";
@@ -139,9 +163,9 @@ Once you have your `led_strip` properly defined you need to add it to the root d
 
 ```
 / {
-	chosen {
-		zmk,underglow = &led_strip;
-	};
+    chosen {
+        zmk,underglow = &led_strip;
+    };
 };
 ```
 
