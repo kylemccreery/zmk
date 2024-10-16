@@ -1,5 +1,3 @@
-import React from "react";
-
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
@@ -15,7 +13,7 @@ function mapInterconnect(interconnect: Interconnect) {
   let imageUrl = require(`@site/docs/assets/interconnects/${interconnect.id}/pinout.png`);
 
   return (
-    <TabItem value={interconnect.id}>
+    <TabItem value={interconnect.id} key={interconnect.id}>
       <img src={imageUrl.default} />
 
       <content.default />

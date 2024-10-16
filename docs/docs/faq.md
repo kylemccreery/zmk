@@ -7,10 +7,10 @@ sidebar_label: FAQs
 
 As a best-in-class RTOS, Zephyr™ brings many [benefits](https://www.zephyrproject.org/benefits) to ZMK, such as:
 
-- A _single_ platform [supporting](https://docs.zephyrproject.org/latest/boards/index.html) many architectures, processors and boards.
+- A _single_ platform [supporting](https://docs.zephyrproject.org/3.5.0/boards/index.html) many architectures, processors and boards.
 - Optimization for low-powered, small memory footprint devices.
-- Powerful hardware abstraction and configuration using [DeviceTree](https://docs.zephyrproject.org/latest/guides/dts/index.html) and [Kconfig](https://docs.zephyrproject.org/latest/build/kconfig/index.html).
-- A BLE stack that periodically obtains [qualification](https://docs.zephyrproject.org/latest/connectivity/bluetooth/bluetooth-qual.html) listings, making it easier for final products to obtain qualification from the Bluetooth® SIG.
+- Powerful hardware abstraction and configuration using [DeviceTree](https://docs.zephyrproject.org/3.5.0/build/dts/index.html) and [Kconfig](https://docs.zephyrproject.org/3.5.0/build/kconfig/index.html).
+- A BLE stack that periodically obtains [qualification](https://docs.zephyrproject.org/3.5.0/connectivity/bluetooth/bluetooth-qual.html) listings, making it easier for final products to obtain qualification from the Bluetooth® SIG.
 - Multi-processor support, which is critical for power efficiency in upcoming MCUs.
 - Permissive licensing with its Apache 2.0 open source [license](https://www.apache.org/licenses/LICENSE-2.0).
 - A buzzing developer [community](https://github.com/zephyrproject-rtos/zephyr) including many leading [embedded technology](https://www.zephyrproject.org/project-members) companies.
@@ -37,7 +37,7 @@ ZMK uses the MIT [license](https://github.com/zmkfirmware/zmk/blob/main/LICENSE)
 
 ZMK has the potential to run on any platform supported by Zephyr™. However, it’s impractical for the ZMK contributors to test all possible hardware.
 
-The Zephyr™ [documentation](https://docs.zephyrproject.org/latest/boards/index.html) describes which hardware is currently natively supported by the Zephyr™ platform. _Similar documentation covering which keyboards have been integrated into ZMK is currently being planned._
+The Zephyr™ [documentation](https://docs.zephyrproject.org/3.5.0/boards/index.html) describes which hardware is currently natively supported by the Zephyr™ platform. _Similar documentation covering which keyboards have been integrated into ZMK is currently being planned._
 
 ### Does ZMK compile for AVR?
 
@@ -57,7 +57,7 @@ For keyboards, this is one of two options:
 
 ### What is a “shield”?
 
-In ZMK, a _shield_ is a _PCB_ or _hardwired set of components_ that when combined with a MCU only [board](#what-is-a-board) like the Proton-C or nice!nano, results in a complete usable keyboard. Examples would be keyboard PCBs like the Kyria or Corne. The _shield_ is usually the big PCB containing all the keys.
+In ZMK, a _shield_ is a _PCB_ or _hardwired set of components_ that when combined with an MCU-only [board](#what-is-a-board), like the Proton-C or nice!nano, results in a complete usable keyboard. Examples would be keyboard PCBs like the Kyria or Lily58. The _shield_ is usually the big PCB containing all the keys.
 
 ### Why _boards_ and _shields_? Why not just “keyboard”?
 

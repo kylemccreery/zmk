@@ -13,7 +13,6 @@
 #define RAISE   2
 
 / {
-    chosen { zmk,matrix_transform = &layout_grid_transform; };
     keymap {
         compatible = "zmk,keymap";
         default_layer {

@@ -4,183 +4,91 @@
  * SPDX-License-Identifier: MIT
  */
 
-#include <dt-bindings/led/led.h>
-#include <dt-bindings/zmk/matrix_transform.h>
+ #include "zmk_uno.dtsi"
 
-&arduino_i2c {
-	status = "okay";
-};
-
-&arduino_spi {
-	status = "okay";
-
-	led_strip: ws2812@0 {
-		compatible = "worldsemi,ws2812-spi";
-		label = "RGB";
-
-		/* SPI */
-		reg = <0>; /* ignored, but necessary for SPI bindings */
-		spi-max-frequency = <4000000>;
-
-		/* WS2812 */
-		chain-length = <7>; /* 4 underglow + 3 per-key LEDs */
-		spi-one-frame = <0x70>;
-		spi-zero-frame = <0x40>;
-
-		color-mapping = <LED_COLOR_ID_GREEN LED_COLOR_ID_RED LED_COLOR_ID_BLUE>;
-	};
-};
+#include <behaviors.dtsi>
+#include <physical_layouts.dtsi>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/outputs.h>
 
 / {
-	chosen {
-		zmk,kscan = &kscan_matrix_comp;
-		zmk,backlight = &backlight;
-		zmk,underglow = &led_strip;
-		zmk,matrix-transform = &matrix_transform;
-	};
+    chosen {
+        zmk,physical-layout = &matrix_physical_layout;
+    };
 
-	// Commented out until we add more powerful power domain support
-	// external_power {
-	// 	compatible = "zmk,ext-power-generic";
-	// 	label = "EXT_POWER";
-	// 	init-delay-ms = <200>;
-	// 	control-gpios = <&arduino_header 1 GPIO_ACTIVE_LOW>;
-	// };
+    sensors: sensors {
+        compatible = "zmk,keymap-sensors";
+        sensors = <&encoder>;
+        triggers-per-rotation = <20>;
+        left {
+            triggers-per-rotation = <20>;
+        };
+    };
 
-	rgb_power {
-		compatible = "zmk,ext-power-generic";
-		label = "EXT_POWER";
-		// label = "RGB_POWER";
-		init-delay-ms = <200>;
-		control-gpios = <&arduino_header 1 GPIO_ACTIVE_LOW>;
-	};
+    macros {
+        ZMK_MACRO(ble_zero,
+            wait-ms = <1>;
+            tap-ms = <1>;
+            bindings = <&out OUT_BLE &bt BT_SEL 0>;
+        )
+        ZMK_MACRO(ble_one,
+            wait-ms = <1>;
+            tap-ms = <1>;
+            bindings = <&out OUT_BLE &bt BT_SEL 1>;
+        )
+    };
 
-	backlight: gpioleds {
-		compatible = "gpio-leds";
-		label = "Backlight LEDs";
-		gpio_led_0 {
-			gpios = <&arduino_header 12 GPIO_ACTIVE_HIGH>;
-			label = "Backlight LED 0";
-		};
-	};
+    endpoint_sideband_behaviors {
+        compatible = "zmk,kscan-sideband-behaviors";
 
-	matrix_transform: matrix_transform {
-		compatible = "zmk,matrix-transform";
-		rows = <3>;
-		columns = <4>;
+        auto-enable;
+        kscan = <&kscan_sp3t_toggle>;
 
-		map = <
-		RC(0,0) RC(0,1)
-		RC(1,0) RC(1,1)
-		RC(2,0) RC(2,1) RC(2,2)
-		>;
-	};
+        first_toggle_sideband: first_toggle_sideband {
+            column = <0>;
+            bindings = <&out OUT_USB>;
+        };
 
-	direct_matrix_transform: direct_matrix_transform {
-		compatible = "zmk,matrix-transform";
-		rows = <3>;
-		columns = <4>;
+        second_toggle_sideband: second_toggle_sideband {
+            column = <1>;
+            bindings = <&ble_zero>;
+        };
 
-		map = <
-		RC(0,0) RC(0,1)
-		RC(0,2) RC(0,3)
-		RC(1,0) RC(1,1) RC(1,2)
-		>;
-	};
+        third_toggle_sideband: third_toggle_sideband {
+            column = <2>;
+            bindings = <&ble_one>;
+        };
+    };
 
-	kscan_matrix_comp: kscan_matrix_comp {
-		compatible = "zmk,kscan-composite";
-		rows = <1>;
-		columns = <7>;
+    matrix_physical_layout: matrix_physical_layout {
+        compatible = "zmk,physical-layout";
+        display-name = "Matrix Layout";
 
-		label = "KSCAN_MATRIX_COMP";
+        kscan = <&kscan_matrix>;
+        transform = <&matrix_transform>;
 
-		matrix {
-			kscan = <&kscan_matrix>;
-		};
+        keys
+            = <&key_physical_attrs 100 100 0   0 0 0 0>
+            , <&key_physical_attrs 100 100 100 0 0 0 0>
+            , <&key_physical_attrs 100 100 0   100 0 0 0>
+            , <&key_physical_attrs 100 100 100 100 0 0 0>
+            ;
+    };
 
-		toggle {
-			kscan = <&kscan_sp3t_toggle>;
-			row-offset = <2>;
-		};
+    direct_physical_layout: direct_physical_layout {
+        compatible = "zmk,physical-layout";
 
-	};
+        display-name = "Direct Wire Layout";
 
-	kscan_direct_comp: kscan_direct_comp {
-		compatible = "zmk,kscan-composite";
+        kscan = <&kscan_direct>;
+        transform = <&direct_matrix_transform>;
 
-		label = "KSCAN_DIRECT_COMP";
-		status = "disabled";
-
-		matrix {
-			kscan = <&kscan_direct>;
-		};
-
-		toggle {
-			kscan = <&kscan_sp3t_toggle>;
-			row-offset = <1>;
-		};
-
-	};
-
-	kscan_matrix: kscan_matrix {
-		compatible = "zmk,kscan-gpio-matrix";
-
-		label = "KSCAN_MATRIX";
-
-		diode-direction = "col2row";
-
-		col-gpios
-			= <&arduino_header 10 GPIO_ACTIVE_HIGH>
-			, <&arduino_header 9  GPIO_ACTIVE_HIGH>
-			;
-
-		row-gpios
-			= <&arduino_header 13 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
-			, <&arduino_header 11 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
-			;
-
-	};
-
-	kscan_direct: kscan_direct {
-		compatible = "zmk,kscan-gpio-direct";
-		status = "disabled";
-
-		label = "KSCAN_DIRECT";
-
-		input-gpios
-			= <&arduino_header 10 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-			, <&arduino_header 9  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-			, <&arduino_header 13 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-			, <&arduino_header 11 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-			;
-
-	};
-
-	kscan_sp3t_toggle: kscan_sp3t_toggle {
-		compatible = "zmk,kscan-gpio-direct";
-		toggle-mode;
-
-		label = "KSCAN_TOGGLE";
-
-		input-gpios
-			= <&arduino_header 4 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-			, <&arduino_header 3 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-			, <&arduino_header 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-			;
-	};
-
-	encoder: encoder {
-		label = "ENCODER";
-		resolution = <4>;
-		compatible = "alps,ec11";
-		a-gpios = <&arduino_header 14 GPIO_PULL_UP>;
-		b-gpios = <&arduino_header 15 GPIO_PULL_UP>;
-	};
-
-	sensors {
-		compatible = "zmk,keymap-sensors";
-		sensors = <&encoder>;
-	};
+        keys
+            = <&key_physical_attrs 100 100 0   0 0 0 0>
+            , <&key_physical_attrs 100 100 100 0 0 0 0>
+            , <&key_physical_attrs 100 100 0   100 0 0 0>
+            , <&key_physical_attrs 100 100 100 100 0 0 0>
+            ;
+    };
 
 };

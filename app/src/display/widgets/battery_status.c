@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: MIT
  */
 
-#include <kernel.h>
-#include <bluetooth/services/bas.h>
+#include <zephyr/kernel.h>
 
-#include <logging/log.h>
+#include <zephyr/logging/log.h>
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
+#include <zmk/battery.h>
 #include <zmk/display.h>
 #include <zmk/display/widgets/battery_status.h>
 #include <zmk/usb.h>
@@ -55,7 +55,6 @@ static void set_battery_symbol(lv_obj_t *label, struct battery_status_state stat
     }
 #endif
     lv_label_set_text(label, text);
-    lv_obj_align(label, NULL, LV_ALIGN_IN_TOP_RIGHT, 0, 0);
 }
 
 void battery_status_update_cb(struct battery_status_state state) {
@@ -64,8 +63,10 @@ void battery_status_update_cb(struct battery_status_state state) {
 }
 
 static struct battery_status_state battery_status_get_state(const zmk_event_t *eh) {
-    return (struct battery_status_state) {
-        .level = bt_bas_get_battery_level(),
+    const struct zmk_battery_state_changed *ev = as_zmk_battery_state_changed(eh);
+
+    return (struct battery_status_state){
+        .level = (ev != NULL) ? ev->state_of_charge : zmk_battery_state_of_charge(),
 #if IS_ENABLED(CONFIG_USB_DEVICE_STACK)
         .usb_present = zmk_usb_is_powered(),
 #endif /* IS_ENABLED(CONFIG_USB_DEVICE_STACK) */
@@ -81,9 +82,7 @@ ZMK_SUBSCRIPTION(widget_battery_status, zmk_usb_conn_state_changed);
 #endif /* IS_ENABLED(CONFIG_USB_DEVICE_STACK) */
 
 int zmk_widget_battery_status_init(struct zmk_widget_battery_status *widget, lv_obj_t *parent) {
-    widget->obj = lv_label_create(parent, NULL);
-
-    lv_obj_set_size(widget->obj, 43, 15);
+    widget->obj = lv_label_create(parent);
 
     sys_slist_append(&widgets, &widget->node);
 

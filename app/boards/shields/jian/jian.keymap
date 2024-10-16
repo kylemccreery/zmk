@@ -13,8 +13,8 @@
 #define RSE 2
 #define ADJ 3
 
-&lt { quick_tap_ms = <200>; };
-&mt { quick_tap_ms = <200>; };
+&lt { quick-tap-ms = <200>; };
+&mt { quick-tap-ms = <200>; };
 
 / {
         keymap {
@@ -25,7 +25,7 @@
 // |  GUI |   ~  |  Q  |  W  |  E  |  R  |  T  |   |  Y  |  U   |  I  |  O  |  P  |  [   | GUI/] |
 //        | CTRL |  A  |  S  |  D  |  F  |  G  |   |  H  |  J   |  K  |  L  |  ;  |CTRL/'|
 //        | LALT |  Z  |  X  |  C  |  V  |  B  |   |  N  |  M   |  ,  |  .  |  /  | RALT |
-//                           | RSE | SPC | LWR |   | LWR | BKSP | RSE |
+//                           | RSE | SPC | LWR |   | LWR | BSPC | RSE |
                         bindings = <
    &kp LWIN &kp GRAVE &kp Q &kp W &kp E &kp R &kp T &kp Y         &kp U  &kp I     &kp O   &kp P    &kp LBKT &mt RWIN RBKT
             &kp LCTRL &kp A &kp S &kp D &kp F &kp G &kp H         &kp J  &kp K     &kp L   &kp SEMI &mt RCTRL SQT
@@ -67,7 +67,7 @@
 //       |      |     |     |     |     |     |   |     |     |     |     |     |      |
 //                          |     |     |     |   |     |     |     |
                         bindings = <
-   &reset &bootloader  &none        &none        &none        &none        &none              &none        &none        &none        &none        &none         &bootloader &reset
+   &sys_reset &bootloader  &none        &none        &none        &none        &none              &none        &none        &none        &none        &none         &bootloader &sys_reset
           &bt BT_CLR   &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4       &bt BT_SEL 4 &bt BT_SEL 3 &bt BT_SEL 2 &bt BT_SEL 1 &bt BT_SEL 0  &bt BT_CLR
           &none        &none        &none        &none        &none        &none              &none        &none        &none        &none        &none         &none
                                                                     &trans &none &trans   &trans &none &trans
